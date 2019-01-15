@@ -1,0 +1,28 @@
+prefix: baseline-64-6p-256-im384-step20-nesterov
+
+# data
+dataset: duke
+image_size: [384,128]
+share_embed: false
+
+# device
+gpu: 0
+
+# optimization
+ft_lr: 0.01
+new_params_lr: 0.1
+lr_step: [20,40]
+num_epoch: 60
+
+# architecture
+num_parts: 6
+
+
+
+
+
+
+
+
+
+
