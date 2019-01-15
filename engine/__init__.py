@@ -1,6 +1,8 @@
 import torch
 import logging
 
+import numpy as np
+
 from ignite.handlers import Timer
 from ignite.handlers import ModelCheckpoint
 from ignite.engine import Events
@@ -10,7 +12,7 @@ from engine.create_reid_engine import create_train_engine
 from engine.create_reid_engine import create_eval_engine
 from engine.scalar_metric import ScalarMetric
 
-from utils.evaluation import eval_feature
+from utils.evaluation import eval_rank_list
 
 
 def get_trainer(model, optimizer, criterion, lr_scheduler=None, logger=None, device=None, non_blocking=False,
@@ -60,20 +62,20 @@ def get_trainer(model, optimizer, criterion, lr_scheduler=None, logger=None, dev
             # extract query feature
             evaluator.run(query_loader)
 
-            q_feats = torch.cat(evaluator.state.feat_list, dim=0)
-            q_ids = torch.cat(evaluator.state.id_list, dim=0)
-            q_cam = torch.cat(evaluator.state.cam_list, dim=0)
+            q_feats = torch.cat(evaluator.state.feat_list, dim=0).numpy()
+            q_ids = torch.cat(evaluator.state.id_list, dim=0).numpy()
+            q_cam = torch.cat(evaluator.state.cam_list, dim=0).numpy()
 
             # extract gallery feature
             evaluator.run(gallery_loader)
 
-            g_feats = torch.cat(evaluator.state.feat_list, dim=0)
-            g_ids = torch.cat(evaluator.state.id_list, dim=0)
-            g_cam = torch.cat(evaluator.state.cam_list, dim=0)
+            g_feats = torch.cat(evaluator.state.feat_list, dim=0).numpy()
+            g_ids = torch.cat(evaluator.state.id_list, dim=0).numpy()
+            g_cam = torch.cat(evaluator.state.cam_list, dim=0).numpy()
 
-            print(g_feats.shape)
+            rank_list = np.argsort(-np.dot(q_feats, g_feats.T), axis=1)
 
-            eval_feature(q_feats, g_feats, q_ids, q_cam, g_ids, g_cam)
+            eval_rank_list(rank_list, q_ids, q_cam, g_ids, g_cam)
 
         torch.cuda.empty_cache()
 

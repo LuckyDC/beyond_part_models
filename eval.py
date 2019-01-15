@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import subprocess
+import torch
 
 import scipy.io as sio
 
@@ -39,4 +40,4 @@ if __name__ == '__main__':
     gallery_cam_ids = gallery_mat["cam_ids"].squeeze()
 
     eval_feature(query_features, gallery_features, query_ids, query_cam_ids, gallery_ids, gallery_cam_ids,
-                 gpu=args.gpu)
+                 torch.device("cuda", args.gpu))

@@ -1,11 +1,11 @@
-prefix: test
+prefix: baseline-6p-im384-256
 
 # data
 dataset: duke
 image_size: [384,128]
 share_embed: true
 
-validate_interval: 1
+validate_interval: 20
 
 # device
 gpu: 1

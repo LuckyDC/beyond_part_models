@@ -63,7 +63,8 @@ if __name__ == '__main__':
                                     image_size=cfg.image_size,
                                     random_crop=cfg.random_crop,
                                     random_erase=cfg.random_erase,
-                                    random_mirror=cfg.random_mirror)
+                                    random_mirror=cfg.random_mirror,
+                                    num_workers=4)
 
     query_loader = None
     gallery_loader = None
@@ -71,12 +72,12 @@ if __name__ == '__main__':
         query_loader = get_test_loader(root=os.path.join(cfg.root, cfg.query),
                                        batch_size=512,
                                        image_size=cfg.image_size,
-                                       num_workers=8)
+                                       num_workers=4)
 
         gallery_loader = get_test_loader(root=os.path.join(cfg.root, cfg.gallery),
                                          batch_size=512,
                                          image_size=cfg.image_size,
-                                         num_workers=8)
+                                         num_workers=4)
 
     # model
     model = PCBModel(num_class=cfg.num_id,
