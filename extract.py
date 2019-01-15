@@ -25,7 +25,7 @@ if __name__ == '__main__':
     torch.backends.cudnn.benchmark = True
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 
-    state_dict = torch.load(model_path, map_location=torch.device("cuda")).state_dict()
+    state_dict = torch.load(model_path, map_location=torch.device("cuda"))
 
     num_parts = 0
     for k in state_dict.keys():

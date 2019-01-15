@@ -31,18 +31,18 @@ class PCBModel(nn.Module):
         if share_embed:
             embed = nn.Sequential(nn.Linear(2048, bottleneck_dims, bias=False),
                                   nn.BatchNorm1d(num_features=bottleneck_dims),
-                                  nn.ReLU())
+                                  nn.ReLU(inplace=True))
             self.embed = nn.ModuleList([embed for _ in range(num_parts)])
 
         else:
             self.embed = nn.ModuleList([nn.Sequential(nn.Linear(2048, bottleneck_dims, bias=False),
                                                       nn.BatchNorm1d(num_features=bottleneck_dims),
-                                                      nn.ReLU()) for _ in range(num_parts)])
+                                                      nn.ReLU(inplace=True)) for _ in range(num_parts)])
 
         self.classifier = None
         if num_class is not None:
             self.classifier = nn.ModuleList(
-                [nn.Linear(bottleneck_dims, num_class) for _ in range(num_parts)])
+                [nn.Linear(bottleneck_dims, num_class, bias=False) for _ in range(num_parts)])
 
     def forward(self, x):
         x = self.backbone_forward(x)

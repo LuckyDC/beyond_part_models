@@ -9,10 +9,14 @@ import numpy as np
 
 from torch import optim
 from torch import nn
+from torch.nn import init
 
 from models import PCBModel
-from engine import create_train_engine
+from engine import get_trainer
+from data import get_test_loader
 from data import get_train_loader
+
+from utils.initializer import Initializer
 
 from configs.default import cfg
 
@@ -30,9 +34,9 @@ if __name__ == '__main__':
     customized_cfg = yaml.load(open(cfg_file, "r"))
 
     data_cfg = cfg.get(cfg.dataset)
-    cfg.root = data_cfg.root
-    cfg.train = data_cfg.train
-    cfg.num_id = data_cfg.num_id
+    for k, v in data_cfg.items():
+        cfg[k] = v
+
     cfg.freeze()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = str(cfg.gpu)
@@ -54,18 +58,37 @@ if __name__ == '__main__':
     logger.info(pprint.pformat(customized_cfg))
 
     # data loader
-    loader = get_train_loader(root=os.path.join(cfg.root, cfg.train),
-                              batch_size=cfg.batch_size,
-                              image_size=cfg.image_size,
-                              random_crop=cfg.random_crop,
-                              random_erase=cfg.random_erase,
-                              random_mirror=cfg.random_mirror)
+    train_loader = get_train_loader(root=os.path.join(cfg.root, cfg.train),
+                                    batch_size=cfg.batch_size,
+                                    image_size=cfg.image_size,
+                                    random_crop=cfg.random_crop,
+                                    random_erase=cfg.random_erase,
+                                    random_mirror=cfg.random_mirror)
+
+    query_loader = None
+    gallery_loader = None
+    if cfg.validate_interval > 0:
+        query_loader = get_test_loader(root=os.path.join(cfg.root, cfg.query),
+                                       batch_size=512,
+                                       image_size=cfg.image_size,
+                                       num_workers=8)
+
+        gallery_loader = get_test_loader(root=os.path.join(cfg.root, cfg.gallery),
+                                         batch_size=512,
+                                         image_size=cfg.image_size,
+                                         num_workers=8)
 
     # model
     model = PCBModel(num_class=cfg.num_id,
-                     num_parts=6,
-                     bottleneck_dims=256,
-                     pool_type="avg")
+                     num_parts=cfg.num_parts,
+                     bottleneck_dims=cfg.bottleneck_dims,
+                     pool_type=cfg.pool_type,
+                     share_embed=cfg.share_embed)
+
+    # initialize
+    init = Initializer(init.normal_, {"std": 0.001})
+    model.embed.apply(init)
+    model.classifier.apply(init)
 
     # criterion
     criterion = nn.CrossEntropyLoss()
@@ -79,17 +102,22 @@ if __name__ == '__main__':
     lr_scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=cfg.lr_step, gamma=0.1)
 
     # engine
-    engine = create_train_engine(model=model,
-                                 optimizer=optimizer,
-                                 criterion=criterion,
-                                 lr_scheduler=lr_scheduler,
-                                 logger=logger,
-                                 device=torch.device("cuda"),
-                                 non_blocking=True,
-                                 log_period=cfg.log_period,
-                                 save_interval=10,
-                                 save_dir="checkpoints/" + cfg.dataset,
-                                 prefix=cfg.prefix)
+    engine = get_trainer(model=model,
+                         optimizer=optimizer,
+                         criterion=criterion,
+                         lr_scheduler=lr_scheduler,
+                         logger=logger,
+                         device=torch.device("cuda"),
+                         non_blocking=True,
+                         log_period=cfg.log_period,
+                         save_interval=10,
+                         save_dir="checkpoints/" + cfg.dataset,
+                         prefix=cfg.prefix,
+                         validate_interval=cfg.validate_interval,
+                         query_loader=query_loader,
+                         gallery_loader=gallery_loader)
 
     # training
-    engine.run(loader, max_epochs=cfg.num_epoch)
+    engine.run(train_loader, max_epochs=cfg.num_epoch)
+
+    print("Model saved at checkpoints/{}/{}_model_{}.pth".format(cfg.dataset, cfg.prefix, cfg.num_epoch))

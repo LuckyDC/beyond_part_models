@@ -46,16 +46,20 @@ def compute_ap(good_index, junk_index, sort_index):
     return ap, cmc
 
 
-def eval_feature(query_features, gallery_features, query_ids, query_cam_ids, gallery_ids, gallery_cam_ids, gpu):
-    num_query = query_ids.shape[0]
-    num_gallery = gallery_ids.shape[0]
+def eval_feature(query_features, gallery_features, query_ids, query_cam_ids, gallery_ids, gallery_cam_ids, gpu=None):
 
-    gallery_features = torch.from_numpy(gallery_features).cuda(gpu)
-    query_features = torch.from_numpy(query_features).cuda(gpu)
+    if isinstance(gallery_features, np.ndarray):
+        gallery_features = torch.from_numpy(gallery_features)
 
-    if gpu != -1:
+    if isinstance(query_features, np.ndarray):
+        query_features = torch.from_numpy(query_features)
+
+    if gpu is not None:
         gallery_features = gallery_features.cuda(gpu)
         query_features = query_features.cuda(gpu)
+
+    num_query = query_ids.shape[0]
+    num_gallery = gallery_ids.shape[0]
 
     gallery_features = F.normalize(gallery_features, p=2, dim=1)
     query_features = F.normalize(query_features, p=2, dim=1)

@@ -33,6 +33,7 @@ cfg.share_embed = False
 cfg.dataset = "duke"
 
 # logging
+cfg.validate_interval = -1
 cfg.log_period = 50
 
 # config for dataset
