@@ -1,14 +1,14 @@
-## Part Convolutional Baseline
+# Part Convolutional Baseline
 
 This project implements PCB (Part-based Convolutional Baseline) of paper [Beyond Part Models: Person Retrieval with Refined Part Pooling](https://arxiv.org/abs/1711.09349) using [pytorch](https://github.com/pytorch/pytorch).
 
-### Dependency
+## Dependency
 
 * Python 3.6
 * Pytorch 1.0
 * ignite 0.1
 
-### Usage
+## Usage
 
 ```bash
 python3 train.py
@@ -55,7 +55,7 @@ python3 eval.py [gpu-id] [chekpoint-path]
 
 
 
-### Performance
+## Performance
 
 #### DukeMTMC-reID
 
