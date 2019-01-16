@@ -82,9 +82,9 @@ class PCBModel(nn.Module):
     def eval_forward(self, x):
         embeds = []
         for i in range(x.size(2)):
-            embed = self.embed[i](x[:, :, i])
-            embeds.append(embed)
+            # embed = self.embed[i](x[:, :, i])
+            # embeds.append(embed)
 
-            # embeds.append(x[:, :, i])
+            embeds.append(x[:, :, i])
 
         return torch.cat(embeds, dim=1)
