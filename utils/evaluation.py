@@ -1,5 +1,3 @@
-from __future__ import print_function, division
-
 import numba
 import torch
 import numpy as np
@@ -62,7 +60,7 @@ def eval_feature(query_features, gallery_features, query_ids, query_cam_ids, gal
     gallery_features = F.normalize(gallery_features, p=2, dim=1)
     query_features = F.normalize(query_features, p=2, dim=1)
 
-    dist_array = -torch.mm(query_features, gallery_features.transpose(0, 1)).cpu().contiguous().numpy()
+    dist_array = -torch.mm(query_features, gallery_features.transpose(0, 1)).cpu().numpy()
 
     ap = np.zeros((num_query,))  # average precision
     cmc = np.zeros((num_query, num_gallery))

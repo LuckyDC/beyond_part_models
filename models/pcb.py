@@ -1,13 +1,6 @@
-from __future__ import print_function
-from __future__ import division
-
 import torch
-import torch.nn.functional as F
 
 from torch import nn
-
-from layers.norm_linear import NormalizeLinear
-from layers.random_walk_layer import RWLayer
 from torchvision.models import resnet50
 
 
