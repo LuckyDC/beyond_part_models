@@ -1,19 +1,19 @@
 prefix: baseline-6p-im384-256
 
 # data
-dataset: duke
+dataset: msmt
 image_size: [384,128]
 share_embed: true
 
-validate_interval: 20
+validate_interval: -1
 
 # device
-gpu: 1
+gpu: 6
 
 # optimization
 ft_lr: 0.01
 new_params_lr: 0.1
-lr_step: [20,50]
+lr_step: [20,40]
 num_epoch: 60
 
 # architecture

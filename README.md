@@ -61,7 +61,19 @@ python3 eval.py [gpu-id] [chekpoint-path]
 
 | setting | mAP   | Rank-1 |
 | ------- | ----- | ------ |
-| Paper   | 81.90 | 65.30  |
+| paper  | 81.90 | 65.30  |
 | share-embed | 67.95  | 82.76   |
-| independent-embed  | 71.70 |  84.91  | 
+| independent-embed  | 71.70 |  84.91  |
 
+#### Market-1501
+| setting | mAP   | Rank-1 |
+| ------- | ----- | ------ |
+| paper  | 92.40 | 77.30  |
+| share-embed | 78.03 | 92.93 |
+| independent-embed  | 80.30 | 93.26  |
+
+#### MSMT17
+| setting | mAP   | Rank-1 |
+| ------- | ----- | ------ |
+| share-embed | 42.45   |  70.35   |
+| independent-embed | 46.75    |  72.96  |

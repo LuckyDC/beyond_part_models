@@ -59,7 +59,7 @@ class ImageFolder(Dataset):
 
 class ImageListFile(Dataset):
     def __init__(self, path, prefix=None, transform=None, label_organize=False):
-        if os.path.isfile(path):
+        if not os.path.isfile(path):
             raise ValueError("The file %s does not exist." % path)
 
         image_list = list(np.loadtxt(path, delimiter=" ", dtype=np.str)[:, 0])
