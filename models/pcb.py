@@ -42,7 +42,7 @@ class PCBModel(nn.Module):
 
         # part pooling
         x = self.part_pool(x)
-        x = x.squeeze()
+        x = x.squeeze(-1)
 
         if not self.training:
             return self.eval_forward(x)

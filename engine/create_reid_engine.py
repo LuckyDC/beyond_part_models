@@ -72,8 +72,8 @@ def create_eval_engine(model, device=None, non_blocking=False):
 
     @engine.on(Events.ITERATION_COMPLETED)
     def store_data(engine):
-        engine.state.feat_list.append(engine.state.output[0])
-        engine.state.id_list.append(engine.state.output[1])
-        engine.state.cam_list.append(engine.state.output[2])
+        engine.state.feat_list.append(engine.state.output[0].data.clone())
+        engine.state.id_list.append(engine.state.output[1].data.clone())
+        engine.state.cam_list.append(engine.state.output[2].data.clone())
 
     return engine
