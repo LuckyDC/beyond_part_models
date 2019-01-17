@@ -110,12 +110,5 @@ python3 eval.py [gpu-id] [chekpoint-path]
 | share-embed-12288 | 72.29  | 91.74   |
 | independent-embed-12288  | 72.29  | 91.95  |
 
-#### MSMT17
-| setting | mAP   | Rank-1 |
-| ------- | ----- | ------ |
-| share-embed-1536 | 42.45   |  70.35   |
-| independent-embed-1536 | 46.75    |  72.96  |
-
-
 
 
