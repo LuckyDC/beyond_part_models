@@ -4,9 +4,11 @@ This project implements PCB (Part-based Convolutional Baseline) of paper [Beyond
 
 ## Dependency
 
-* Python 3.6
-* Pytorch 1.0
-* ignite 0.1
+* python 3.6
+* pytorch 1.0
+* torchvision 
+* ignite
+* yacs  
 
 ## Usage
 
@@ -81,8 +83,8 @@ python3 eval.py [gpu-id] [chekpoint-path]
 #### MSMT17
 | setting | mAP   | Rank-1 |
 | ------- | ----- | ------ |
-| share-embed-1536 |    |     |
-| independent-embed-1536 |     |    |
+| share-embed-1536 | 42.39   |  69.59   |
+| independent-embed-1536 |  47.20   |  74.05  |
 
 
 *We also evaluate the original setting with a decay step-size of 20 which is adopted in some re-implementations.*
