@@ -1,14 +1,14 @@
-prefix: baseline-1p-im384-256
+prefix: baseline-2p-im384-256
 
 # data
 dataset: duke
 image_size: [384,128]
-share_embed: true
+share_embed: false
 
 validate_interval: 60
 
 # device
-gpu: 4
+gpu: 3
 
 # optimization
 ft_lr: 0.01
@@ -17,7 +17,7 @@ lr_step: [40]
 num_epoch: 60
 
 # architecture
-num_parts: 1
+num_parts: 2
 
 
 

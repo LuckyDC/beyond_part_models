@@ -12,6 +12,8 @@ from engine.create_reid_engine import create_train_engine
 from engine.create_reid_engine import create_eval_engine
 from engine.scalar_metric import ScalarMetric
 
+from sklearn.preprocessing import normalize
+
 from utils.evaluation import eval_rank_list
 
 
@@ -73,7 +75,7 @@ def get_trainer(model, optimizer, criterion, lr_scheduler=None, logger=None, dev
             g_ids = torch.cat(evaluator.state.id_list, dim=0).numpy()
             g_cam = torch.cat(evaluator.state.cam_list, dim=0).numpy()
 
-            rank_list = np.argsort(-np.dot(q_feats, g_feats.T), axis=1)
+            rank_list = np.argsort(-np.dot(normalize(q_feats), normalize(g_feats).T), axis=1)
 
             eval_rank_list(rank_list, q_ids, q_cam, g_ids, g_cam)
 
