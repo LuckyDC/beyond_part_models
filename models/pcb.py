@@ -1,7 +1,7 @@
 import torch
 
 from torch import nn
-from torchvision.models import resnet50
+from models.resnet import resnet50
 
 
 class PCBModel(nn.Module):
@@ -9,11 +9,7 @@ class PCBModel(nn.Module):
         super(PCBModel, self).__init__()
 
         assert pool_type in ['max', 'avg']
-        self.backbone = resnet50(pretrained=True)
-
-        # remove the final downsample
-        self.backbone.layer4[0].downsample[0].stride = (1, 1)
-        self.backbone.layer4[0].conv2.stride = (1, 1)
+        self.backbone = resnet50(pretrained=True, last_stride=1)
 
         if pool_type == "max":
             self.part_pool = nn.AdaptiveAvgPool2d((num_parts, 1))
